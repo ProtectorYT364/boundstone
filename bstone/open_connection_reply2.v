@@ -1,8 +1,10 @@
 module bstone
 
+import vraklib
+
 struct OpenConnectionReply2 {
 mut:
-    p Packet
+    p vraklib.Packet
 
     server_id i64
     client_address InternetAddress
@@ -10,7 +12,7 @@ mut:
     security bool
 }
 
-fn (r mut OpenConnectionReply2) encode() {
+fn (mut r OpenConnectionReply2) encode() {
     r.p.buffer.put_byte(IdOpenConnectionReply2)
     r.p.buffer.put_bytes(get_packet_magic().data, RaknetMagicLength)
     r.p.buffer.put_long(r.server_id)

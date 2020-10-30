@@ -1,8 +1,10 @@
 module bstone
 
+import vraklib
+
 struct UnConnectedPing {
 mut:
-    p Packet
+    p vraklib.Packet
 
     ping_id i64
     client_id u64
@@ -10,7 +12,7 @@ mut:
 
 fn (u UnConnectedPing) encode() {}
 
-fn (u mut UnConnectedPing) decode() {
+fn (mut u UnConnectedPing) decode() {
     u.p.buffer.get_byte() // Packet ID
     u.ping_id = u.p.buffer.get_long()
     u.p.buffer.get_bytes(RaknetMagicLength)

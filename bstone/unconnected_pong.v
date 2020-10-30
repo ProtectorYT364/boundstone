@@ -1,15 +1,17 @@
 module bstone
 
+import vraklib
+
 struct UnConnectedPong {
 mut:
-    p Packet
+    p vraklib.Packet
 
     server_id i64
     ping_id i64
     str string
 }
 
-fn (u mut UnConnectedPong) encode() {
+fn (mut u UnConnectedPong) encode() {
     u.p.buffer.put_byte(IdUnConnectedPong)
     u.p.buffer.put_long(u.ping_id)
     u.p.buffer.put_long(u.server_id)

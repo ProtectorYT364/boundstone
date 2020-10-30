@@ -1,8 +1,10 @@
 module bstone
 
+import vraklib
+
 struct NewIncomingConnection {
 mut:
-    p Packet
+    p vraklib.Packet
 
     address InternetAddress
     system_addresses []InternetAddress
@@ -10,6 +12,6 @@ mut:
     pong_time i64
 }
 
-fn (r mut NewIncomingConnection) decode() {
+fn (mut r NewIncomingConnection) decode() {
     
 }

@@ -1,14 +1,16 @@
 module bstone
 
+import vraklib
+
 struct Player {
-    vraklib VRakLib
+    vraklib vraklib.VRakLib
 
     server Server
     ip string
     port u16
 }
 
-pub fn new_player(vraklib VRakLib, server Server, ip string, port u16) Player {
+pub fn new_player(vraklib vraklib.VRakLib, server Server, ip string, port u16) Player {
     return Player {
         vraklib: vraklib
         server: server
@@ -17,7 +19,7 @@ pub fn new_player(vraklib VRakLib, server Server, ip string, port u16) Player {
     }
 }
 
-fn (p Player) handle_data_packet(packet Packet) {
+fn (p Player) handle_data_packet(packet vraklib.Packet) {
     
 }
 

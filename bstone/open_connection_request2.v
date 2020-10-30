@@ -1,8 +1,10 @@
 module bstone
 
+import vraklib
+
 struct OpenConnectionRequest2 {
 mut:
-    p Packet
+    p vraklib.Packet
 
     security bool
     cookie int
@@ -11,9 +13,9 @@ mut:
     client_id u64
 }
 
-fn (r mut OpenConnectionRequest2) encode() {}
+fn (mut r OpenConnectionRequest2) encode() {}
 
-fn (r mut OpenConnectionRequest2) decode() {
+fn (mut r OpenConnectionRequest2) decode() {
     r.p.buffer.get_byte() // Packet ID
     r.security = r.p.buffer.get_bool()
     r.cookie = r.p.buffer.get_int()
