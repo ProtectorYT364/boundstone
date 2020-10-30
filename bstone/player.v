@@ -19,7 +19,7 @@ pub fn new_player(vraklib vraklib.VRakLib, server Server, ip string, port u16) P
     }
 }
 
-fn (p Player) handle_data_packet(packet vraklib.Packet) {
+fn (p Player) handle_data_packet(packet vraklib.Packet) {//TODO uhm.. shouldn't these be split?
     
 }
 

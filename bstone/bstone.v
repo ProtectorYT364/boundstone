@@ -10,13 +10,13 @@ struct Server {
     player map[string]Player
 
 mut:
-    vraklib VRakLib
+    vraklib vraklib.VRakLib
 } 
 
 pub fn (mut s Server) start() {
-    address := InternetAddress { ip: '0.0.0.0', port: u16(19132), version: byte(4) }
+    address := vraklib.InternetAddress { ip: '0.0.0.0', port: u16(19132), version: byte(4) }
     
-    s.vraklib = VRakLib { server: s, address: address }
+    s.vraklib = vraklib.VRakLib { server: s, address: address }
     s.vraklib.start()
 }
 
