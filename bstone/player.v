@@ -1,6 +1,7 @@
 module bstone
 
 import vraklib
+import vraklib.protocol
 
 struct Player {
     vraklib vraklib.VRakLib

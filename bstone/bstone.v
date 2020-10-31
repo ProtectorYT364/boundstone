@@ -1,10 +1,12 @@
 module bstone
 
-struct Server {
+pub struct Server {
+pub:
     port int = 19132
     number_of_players int = 100
     name string
 
+pub mut:
     players map[string]Player
 }
 
