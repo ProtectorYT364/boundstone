@@ -1,17 +1,16 @@
 module bstone
 
 import vraklib
-import vraklib.protocol
 
 struct Player {
-    vraklib vraklib.VRakLib
+    vraklib VRakLib
 
     server Server
     ip string
     port u16
 }
 
-pub fn new_player(vraklib vraklib.VRakLib, server Server, ip string, port u16) Player {
+pub fn new_player(vraklib VRakLib, server Server, ip string, port u16) Player {
     return Player {
         vraklib: vraklib
         server: server
