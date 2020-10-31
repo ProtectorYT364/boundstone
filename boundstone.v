@@ -8,7 +8,7 @@ import sync
 address := vraklib.InternetAddress { ip: '0.0.0.0', port: u16(19132), version: byte(4) }
 // Threads
 mut server := bstone.Server { name: 'Testserver'}
-mut raklib := vraklib.VRakLib {}
+mut raklib := &vraklib.VRakLib {}
 // Data share
 //channel or sth here
 
