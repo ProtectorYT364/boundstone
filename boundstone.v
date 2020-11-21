@@ -25,16 +25,16 @@ mut raklib := &vraklib.VRakLib {address: address }
     //available colors are: black,blue,yellow,green,cyan,gray,bright_blue,bright_green,bright_red,bright_black,bright_cyan
     term.clear()
     //width, height := term.get_terminal_size()
-    term.hide_cursor()
+    //term.hide_cursor()
     //term.set_cursor_position(x: 0, y: height)
     println(term.bg_black(term.red(term.bold('■ boundstone MCPE v0.0.1 ■'))))//TODO dynamic version string
-    mut read_line := os.input('')
+    mut read_line := os.input('>')
 
     for {
         if read_line == 'stop' {
             break
         } else {
-            read_line = os.input('')
+            read_line = os.input('>')
         }
     }
 
