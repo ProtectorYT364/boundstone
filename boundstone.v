@@ -3,13 +3,14 @@ import vraklib
 import sync
 import term
 import os
+//import net
 
 //mut running := true
 //TODO: serversettings
-address := vraklib.InternetAddress { ip: '0.0.0.0', port: u16(19132), version: byte(4) }
+port := 19132
 // Threads
 mut server := bstone.Server { name: 'Testserver'}
-mut raklib := &vraklib.VRakLib {address: address }
+mut raklib := &vraklib.VRakLib {port: port }
 // Data share
 //channel or sth here
 
@@ -28,13 +29,13 @@ mut raklib := &vraklib.VRakLib {address: address }
     //term.hide_cursor()
     //term.set_cursor_position(x: 0, y: height)
     println(term.bg_black(term.red(term.bold('■ boundstone MCPE v0.0.1 ■'))))//TODO dynamic version string
-    mut read_line := os.input('>')
+    mut read_line := os.input('> ')
 
     for {
         if read_line == 'stop' {
             break
         } else {
-            read_line = os.input('>')
+            read_line = os.input('> ')
         }
     }
 
