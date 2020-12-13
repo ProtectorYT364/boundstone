@@ -1,18 +1,32 @@
 module bstone
 
-pub struct Server {
-pub:
-	port              int = 19132
-	number_of_players int = 100
-	name              string
+import net
+
+pub struct ServerConfig {
 pub mut:
-	players           map[string]Player
+	address     net.Addr
+	max_players int = 100
+	name        string = 'boundstone MCPE'
+}
+
+pub struct Server {
+pub mut:
+	config  ServerConfig
+	players map[string]Player
+}
+
+pub fn new_server(config ServerConfig) &Server {
+	sm := &Server{config, map[string]Player{}}
+	return sm
 }
 
 pub fn (mut s Server) start() {
+	println('Server thread starting')
+	println('Address: ' + s.config.address.str())
 }
 
 pub fn (mut s Server) stop() {
+	println('Server thread stopping')
 }
 
 pub fn (mut s Server) add_player(player Player) {
