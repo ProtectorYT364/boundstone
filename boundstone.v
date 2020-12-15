@@ -44,6 +44,6 @@ fn main() {
 		}
 	}
 	println(term.warn_message('Shutting down..'))
-	raklib.stop()
+	//raklib.stop()
 	server.stop()
 }
