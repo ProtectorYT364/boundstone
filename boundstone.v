@@ -24,7 +24,7 @@ fn main() {
 	ch2 := chan vraklib.HandleEncapsulatedData{}
 	ch3 := chan vraklib.PutPacketData{}
 	// raklib = vraklib.VRakLib { address: address }
-	address := '127.0.0.1:19132'
+	address := '0.0.0.0:19132'
 	saddr, port := net.split_address(address) or { panic(err) } // ?
 	net_addr := net.Addr{
 		saddr: saddr

@@ -22,7 +22,6 @@ pub fn new_server(config ServerConfig) &Server {
 
 pub fn (mut s Server) start() {
 	println('Server thread starting')
-	println('Address: ' + s.config.address.str())
 }
 
 pub fn (mut s Server) stop() {
