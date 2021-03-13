@@ -3,9 +3,9 @@ import net
 import time
 
 fn main() {
-	address := '127.0.0.1:19133'
+	address := '127.0.0.1:19132'
 
-	mut c := net.dial_udp('127.0.0.1:19132', address) or { panic(err) }
+	mut c := net.dial_udp('127.0.0.1:19133', address) or { panic(err) }
 	defer {
 		c.close() or { }
 	}
@@ -16,6 +16,7 @@ fn main() {
 	ping.encode(mut b)
 	println('UnConnectedPing: "$ping"')
 	println('Encoded "$b.buffer.bytestr()"')
+	c.write(b.buffer) or { panic(err) }
 	//rewind buffer
 	b.position = 0
 	//ping.decode(mut b)
@@ -45,7 +46,13 @@ fn main() {
 	println(pong)
 	println(pong.data.bytestr())
 
-	//c.close() or { panic(err) }
+	// defer {
+	// 	c.close() or { panic(err) }
+	// }
+	c.close() or {
+		 	println('Server: connection dropped')
+		 	panic(err)
+	}
 }
 
 // timestamp returns a timestamp in milliseconds.
