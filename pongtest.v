@@ -3,19 +3,18 @@ import net
 import time
 
 fn main() {
-	l := net.listen_udp(19132) or { panic(err) }
+	l := net.listen_udp(19132) or { panic(err) }//binds to local address
 	echo_server(l)
 }
 
 fn echo_server(_c net.UdpConn) {
 	mut c := _c
 	for {
-		mut buf := []byte{len: 1000, init: 0}
-		n, addr := c.read(mut buf) or { continue }
-		if n > 0{
-			//c.close() or { panic(err) }
+		mut buf := []byte{len: 1500, init: 0}
+		n, addr := c.read(mut buf) or { continue }//addr is from recvfrom, client address
+		if n <= 0{
+			continue//no data, receive next
 		}
-		//c.close()
 		println('Got address $addr')
 		println('Got $n vs $buf.len bytes: "$buf.bytestr()"')
 		// trim data
@@ -43,22 +42,18 @@ fn echo_server(_c net.UdpConn) {
 		pong.encode(mut pong.p.buffer)
 		buf = pong.p.buffer.buffer
 		println(buf)
-		println(addr.str())
-		// c.write(buf) or {
-		//  	println('Server: connection dropped')
-		//  	println(err)
-		//  	return
-		// }
 
-	mut r := net.dial_udp('127.0.0.1:19133', addr.str())  or { panic(err) }
-	defer {
-		c.close() or { panic(err) }
+		println('Writing to address $addr: $buf')
+		mut error := c.write_to(addr, buf) or { panic(err) }//sends thedata to the client C.sendto, returns int on error, none otherwise
+		println(error)
+		if error == buf.len{
+		println('Success')
+		}else{
+		println('Failed')}
 	}
-	r.write(buf) or { panic(err) }
-	r.close() or {
+	c.close() or {
 		 	println('Server: connection dropped')
 		 	panic(err)
-		}
 	}
 }
 
