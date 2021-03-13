@@ -9,6 +9,15 @@ import sync
 // mut running := true
 // TODO: serversettings
 fn main() {
+	//mut threads := []thread{}
+	// start terminal
+	// available colors are: black,blue,yellow,green,cyan,gray,bright_blue,bright_green,bright_red,bright_black,bright_cyan
+	term.clear()
+	// width, height := term.get_terminal_size()
+	// term.hide_cursor()
+	// term.set_cursor_position(x: 0, y: height)
+	println(term.bg_black(term.red(term.bold('■ boundstone MCPE v0.0.1 ■'))))
+
 	// Data share
 	// channel or sth here
 	ch1 := chan vraklib.OpenSessionData{}
@@ -23,17 +32,11 @@ fn main() {
 	}
 	println(net_addr.str())
 	mut raklib := vraklib.new_vraklib(net_addr)
-	go raklib.start(ch1, ch2, ch3)
+	/*threads <<*/ go raklib.start(ch1, ch2, ch3)
 	mut server := bstone.new_server(address: net_addr) // or { panic(err) }
-	server.start()
+	server.start()//todo put in threads
 	// go raklib.start(ch1, ch2, ch3)
-	// start terminal
-	// available colors are: black,blue,yellow,green,cyan,gray,bright_blue,bright_green,bright_red,bright_black,bright_cyan
-	term.clear()
-	// width, height := term.get_terminal_size()
-	// term.hide_cursor()
-	// term.set_cursor_position(x: 0, y: height)
-	println(term.bg_black(term.red(term.bold('■ boundstone MCPE v0.0.1 ■'))))
+	println(term.bg_black(term.green('Use "stop" for shutdown')))
 	// TODO dynamic version string
 	mut read_line := os.input('> ')
 	for {
@@ -46,4 +49,6 @@ fn main() {
 	println(term.warn_message('Shutting down..'))
 	//raklib.stop()
 	server.stop()
+	//threads.wait()
+	println(term.warn_message('Stopped.'))
 }
