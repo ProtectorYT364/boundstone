@@ -12,7 +12,7 @@ fn main() {
 
 	mut fuckoff := []byte{len: 33}
 	mut b := vraklib.new_bytebuffer(fuckoff, u32(33))
-	mut ping := vraklib.UnConnectedPing{send_timestamp: timestamp(), client_guid: u64(1)}
+	mut ping := vraklib.UnConnectedPing{send_timestamp: vraklib.timestamp(), client_guid: u64(1)}
 	ping.encode(mut b)
 	println('UnConnectedPing: "$ping"')
 	println('Encoded "$b.buffer.bytestr()"')
