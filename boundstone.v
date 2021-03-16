@@ -31,7 +31,7 @@ fn main() {
 		port: port
 	}
 	println(net_addr.str())
-	mut raklib := vraklib.new_vraklib(net_addr)
+	mut raklib := vraklib.new_vraklib(net_addr)//TODO pass server config
 	/*threads <<*/ go raklib.start(ch1, ch2, ch3)
 	mut server := bstone.new_server(address: net_addr) // or { panic(err) }
 	server.start()//todo put in threads
