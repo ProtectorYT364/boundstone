@@ -49,7 +49,12 @@ fn main() {
 	println(pid)
 	pong.decode(mut pong.p.buffer)
 	println(pong)
-	println(pong.data.bytestr())
+	title := pong.data.bytestr()
+	println(title)
+	mut pong_data := vraklib.PongData{}
+	pong_data.from_string(title)
+	println(pong_data)
+
 
 	// defer {
 	// 	c.close() or { panic(err) }
