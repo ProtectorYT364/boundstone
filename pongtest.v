@@ -20,7 +20,7 @@ fn echo_server(_c net.UdpConn) {
 		// trim data
 		buf = buf[..n]
 		println('Got $n bytes: "$buf.bytestr()"')
-		mut b := vraklib.new_bytebuffer(buf, u32(n))
+		mut b := vraklib.new_bytebuffer(buf)
 		pid := b.get_byte()
 		println(pid)
 		mut ping := vraklib.UnConnectedPing{}
@@ -28,12 +28,15 @@ fn echo_server(_c net.UdpConn) {
 		ping.decode(mut b)
 		println(ping)
 		println(b.buffer.bytestr())
-		title := 'MCPE;PocketMine-MP Server;422;1.16.200;0;20;6110147563508788599;PocketMine-MP;Creative;'
+		mut pongdata := vraklib.PongData{
+			server_id: 1234567890
+		}
+		title := pongdata.update_pong_data()
 		len := 35 + title.len
 		buf = []byte{len: len, init: 0}
 		mut pong := vraklib.UnConnectedPong{
-			p: vraklib.new_packet(buf, u32(len))
-			server_guid: 6110147563508788599
+			p: vraklib.new_packet(buf, addr)
+			server_guid: u64(pongdata.server_id)
 			send_timestamp: ping.send_timestamp
 			// send_timestamp: timestamp()
 			data: title.bytes()
@@ -55,9 +58,4 @@ fn echo_server(_c net.UdpConn) {
 		 	println('Server: connection dropped')
 		 	panic(err)
 	}
-}
-
-// timestamp returns a timestamp in milliseconds.
-fn timestamp() u64 {
-	return time.now().unix_time_milli()
 }
