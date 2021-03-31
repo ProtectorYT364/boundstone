@@ -1,26 +1,30 @@
 module bstone
 
 import net
+import log
 
 pub struct ServerConfig {
 pub mut:
-	address     net.Addr
+	addr net.Addr
+	l chan LogMsg
 	max_players int = 100
 	name        string = 'boundstone MCPE'
 }
 
-pub struct Server {
+pub struct LogMsg{
+//pub:
 pub mut:
-	config  ServerConfig
-	players map[string]Player
+	m string
+	l log.Level
 }
 
-pub fn new_server(config ServerConfig) &Server {
-	sm := &Server{config, map[string]Player{}}
+/* pub fn new_server(config ServerConfig) &Server {
+	//sm := &Server{config, map[string]Player{}}
+	sm := &Server{config}
 	return sm
-}
+} */
 
-pub fn (mut s Server) start() {
+/* pub fn (mut s Server) start() {
 	println('Server thread starting')
 }
 
@@ -30,4 +34,8 @@ pub fn (mut s Server) stop() {
 
 pub fn (mut s Server) add_player(player Player) {
 	s.players[player.hash_code().str()] = player
+} */
+
+pub fn(c ServerConfig) log(m string, l log.Level){
+	c.l <- LogMsg{m,l}
 }
