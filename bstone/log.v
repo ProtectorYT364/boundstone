@@ -23,21 +23,29 @@ pub mut:
 pub fn (shared logger Log) run_logger(){
 		println('test1')
 	//mut l := log.Log{}
+	mut l := logger.log
 
-	lock logger{
-	logger.l <- LogMsg{'Logger started $logger.log',.debug}
+	logger.log('Logger started $l',.debug)
+		println('test2')
+	//logger.l <- LogMsg{'Logger started $logger.log',.debug}
+	//logger.log('Logger started $logger.log',.debug)
 	//}
 
-	for !logger.l.closed {//TODO check if infinite
-		mut m := LogMsg{}
-		//rlock logger{
-		println('test2')
-		m = <-logger.l or {
+	//for !logger.l.closed {//TODO check if infinite
+		for{
+			rlock logger{println(logger.l.len)}
+		println('test3')
+		/* m = <-logger.l or {
 			panic('Could not read stream $err')
-			break//returns when closed
-		}
-		//}
-		println(m)
+			//break//returns when closed
+			return
+		} */
+	lock logger{
+			m := <-logger.l or{
+			println('NONE')
+			continue
+			}
+		println('Yes, got $m')
 		f := tag_to_cli(m.l)
 		t := time.now()
 		println('[$f $t.format_ss()] $m.m')//print to cli
@@ -51,7 +59,9 @@ pub fn (shared logger Log) run_logger(){
 			/* lock{ */.debug { logger.log.debug(m.m) }/* } */
 			//}
 		}
-	}}
+		}
+		//}
+	}//}
 
 	println('Logger stopped')//todo maybe move into or
 }
@@ -68,11 +78,18 @@ fn tag_to_cli(l log.Level) string {
 }
 
 pub fn(shared logger Log) log(m string, l log.Level){
-	lock logger{
-	println('Logging $m $l')
+	msg := LogMsg{m,l}
+	println('Logging $m $l $msg')
 	//logger.l <- LogMsg{m,l} //or { panic(err)}
-	println('Success')
+	
+	lock logger {
+		logger.l <- msg or { 
+		println(err)
+		panic(err)
+		}
 	}
+	//logger.l.try_push(LogMsg{m,l})
+	println('Success')
 }
 
 pub fn(mut logger Log) stop(){
