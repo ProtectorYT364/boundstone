@@ -9,10 +9,11 @@ pub struct Server {
 pub mut:
 	//config shared &ServerConfig
 	config shared ServerConfig
+	logger shared Log
 	//players map[string]Player
 }
 
-pub struct ServerConfig {
+pub struct ServerConfig {//TODO replace with config
 pub:
 	addr net.Addr
 pub mut:
@@ -21,14 +22,14 @@ pub mut:
 	shutdown bool = false
 }
 
-pub fn new_server(shared config ServerConfig) &Server {
+pub fn new_server(shared config ServerConfig, shared logger Log) &Server {
 	//sm := &Server{config, map[string]Player{}}
-	sm := &Server{config: config}
+	sm := &Server{config: config, logger: logger}
 	return sm
 }
 
-pub fn (mut s Server) start(shared logger Log) {
-	println('Server thread starting')
+pub fn (mut s Server) start() {
+	s.logger.log('Server thread starting',.debug)
 	for !s.config.shutdown{
 
 	}
@@ -36,7 +37,8 @@ pub fn (mut s Server) start(shared logger Log) {
 
 pub fn (mut s Server) stop() {
 	//s.config.shutdown = true
-	println('Server thread stopping')}
+	s.logger.log('Server thread stopping',.debug)
+	}
 
 /* pub fn (mut s Server) add_player(player Player) {
 	s.players[player.hash_code().str()] = player

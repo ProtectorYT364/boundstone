@@ -27,7 +27,6 @@ fn tag_to_cli(l log.Level) string {
 }
 
 pub fn(shared logger Log) log(m string, l log.Level){
-		println('Logging $l $m')
 		f := tag_to_cli(l)
 		t := time.now()
 		println('[$f $t.format_ss()] $m')//print to cli
