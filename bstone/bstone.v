@@ -29,7 +29,7 @@ pub fn new_server(shared config ServerConfig, shared logger Log) &Server {
 }
 
 pub fn (mut s Server) start() {
-	s.logger.log('Server thread starting',.debug)
+	s.logger().log('Server thread starting',.debug)
 	for !s.config.shutdown{
 
 	}
@@ -37,9 +37,13 @@ pub fn (mut s Server) start() {
 
 pub fn (mut s Server) stop() {
 	//s.config.shutdown = true
-	s.logger.log('Server thread stopping',.debug)
+	s.logger().log('Server thread stopping',.debug)
 	}
 
 /* pub fn (mut s Server) add_player(player Player) {
 	s.players[player.hash_code().str()] = player
 } */
+
+pub fn(s Server) logger() shared Log{
+	return s.logger
+}

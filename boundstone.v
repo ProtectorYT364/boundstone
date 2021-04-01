@@ -7,18 +7,6 @@ import log
 import time
 import json
 
-struct Settings{
-	ip_v4 string = '0.0.0.0'
-	port_v4 u16 = 19132
-	max_players int = 100
-	name string = 'boundstone MCPE'
-	motd string = 'Written in V'
-	gamemode string = 'Creative'
-	show_version bool = true
-	log_level log.Level = .info
-	log_output_level log.Level = .debug
-}
-
 fn main() {
 	// available colors are: black,blue,yellow,green,cyan,gray,bright_blue,bright_green,bright_red,bright_black,bright_cyan
 	term.clear()
@@ -75,6 +63,18 @@ fn main() {
 
 fn read_input() string {
 	return os.input('')
+}
+
+struct Settings{
+	ip_v4 string = '0.0.0.0'
+	port_v4 u16 = 19132
+	max_players int = 100
+	name string = 'boundstone MCPE'
+	motd string = 'Written in V'
+	gamemode string = 'Creative'
+	show_version bool = true
+	log_level log.Level = .info
+	log_output_level log.Level = .debug
 }
 
 fn load_settings() ?Settings {
