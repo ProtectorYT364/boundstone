@@ -2,40 +2,56 @@ module bstone
 
 import net
 import log
+import term
+import time
+
+pub struct Server {
+pub mut:
+	config  ServerConfig
+	shutdown bool = false
+	//players map[string]Player
+}
 
 pub struct ServerConfig {
 pub mut:
 	addr net.Addr
-	l chan LogMsg
 	max_players int = 100
 	name        string = 'boundstone MCPE'
-}
+/* pub:
+	l chan LogMsg */
+}/* 
 
 pub struct LogMsg{
 //pub:
 pub mut:
 	m string
-	l log.Level
-}
-
-/* pub fn new_server(config ServerConfig) &Server {
-	//sm := &Server{config, map[string]Player{}}
-	sm := &Server{config}
-	return sm
+	l log.Level = .debug
 } */
 
-/* pub fn (mut s Server) start() {
+pub fn new_server(config ServerConfig) &Server {
+	//sm := &Server{config, map[string]Player{}}
+	sm := &Server{config: config}
+	return sm
+}
+
+pub fn (mut s Server) start(shared logger Log) {
+	s.shutdown = &logger.stop
+	println('Shutdown? $s.shutdown')
 	println('Server thread starting')
+	for !s.shutdown{
+
+	}
+	s.stop()
+	//logger.close()
+	s.shutdown = &logger.stop
+	println('Shutdown? $s.shutdown')
 }
 
 pub fn (mut s Server) stop() {
 	println('Server thread stopping')
+	println('Shutdown? $s.shutdown')
 }
 
-pub fn (mut s Server) add_player(player Player) {
+/* pub fn (mut s Server) add_player(player Player) {
 	s.players[player.hash_code().str()] = player
 } */
-
-pub fn(c ServerConfig) log(m string, l log.Level){
-	c.l <- LogMsg{m,l}
-}
