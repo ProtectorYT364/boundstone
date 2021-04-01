@@ -71,7 +71,9 @@ fn main() {
 }
 
 pub fn shutdown(shared logger bstone.Log) bool {
-	for !logger.stop{}
+	for !logger.stop{
+		lock logger{logger.log.flush()}
+	}
 	println('Shutdown!')
 	return true
 }
