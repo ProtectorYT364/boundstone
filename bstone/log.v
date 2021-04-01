@@ -7,9 +7,9 @@ import term
 pub struct Log{
 /* mut:
 	log log.Log */
-pub:
-	l chan LogMsg
+//pub mut:
 pub mut:
+	l chan LogMsg
 	stop bool = false
 	log log.Log
 }
@@ -32,19 +32,19 @@ pub fn (shared logger Log) run_logger(){
 	//}
 
 	//for !logger.l.closed {//TODO check if infinite
-		for{
-			rlock logger{println(logger.l.len)}
+		mut m := LogMsg{}
+		lock logger{
+	println(logger.l.len)
+		for !logger.stop {
+			if logger.l.try_pop(m) == .success{
+			println(logger.l.len)
 		println('test3')
 		/* m = <-logger.l or {
 			panic('Could not read stream $err')
 			//break//returns when closed
 			return
 		} */
-	lock logger{
-			m := <-logger.l or{
-			println('NONE')
-			continue
-			}
+		
 		println('Yes, got $m')
 		f := tag_to_cli(m.l)
 		t := time.now()
@@ -59,9 +59,10 @@ pub fn (shared logger Log) run_logger(){
 			/* lock{ */.debug { logger.log.debug(m.m) }/* } */
 			//}
 		}
-		}
 		//}
 	}//}
+	println(logger.l.len)
+		}}
 
 	println('Logger stopped')//todo maybe move into or
 }
@@ -82,11 +83,12 @@ pub fn(shared logger Log) log(m string, l log.Level){
 	println('Logging $m $l $msg')
 	//logger.l <- LogMsg{m,l} //or { panic(err)}
 	
-	lock logger {
-		logger.l <- msg or { 
-		println(err)
-		panic(err)
-		}
+	lock logger{
+	println(logger.l.len)
+		
+	logger.l.try_push(msg)
+	println(logger.l.len)
+	logger.stop()
 	}
 	//logger.l.try_push(LogMsg{m,l})
 	println('Success')

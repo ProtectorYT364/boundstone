@@ -14,7 +14,9 @@ fn main() {
 	// available colors are: black,blue,yellow,green,cyan,gray,bright_blue,bright_green,bright_red,bright_black,bright_cyan
 	term.clear()
 
-	shared logger := bstone.Log{}
+	shared logger := bstone.Log{
+		l: chan bstone.LogMsg{}
+	}
 	lock logger{
 	logger.log.set_level(.info)//TODO from config
 	logger.log.set_output_level(.debug)//TODO from config
@@ -50,8 +52,8 @@ fn main() {
 	mut server := bstone.new_server(config) // or { panic(err) }
 	threads << go server.start(shared logger)//maybe pass config here
 	
-	threads << go logger.run_logger()
 	threads << go read_input(shared logger)
+	threads << go logger.run_logger()
 	
 	logger.log(term.bg_black(term.green('Use "stop" for shutdown')), .info)
 
