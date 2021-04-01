@@ -7,7 +7,8 @@ import time
 
 pub struct Server {
 pub mut:
-	config  &ServerConfig
+	//config shared &ServerConfig
+	config shared ServerConfig
 	//players map[string]Player
 }
 
@@ -20,7 +21,7 @@ pub mut:
 	shutdown bool = false
 }
 
-pub fn new_server(config ServerConfig) &Server {
+pub fn new_server(shared config ServerConfig) &Server {
 	//sm := &Server{config, map[string]Player{}}
 	sm := &Server{config: config}
 	return sm
@@ -28,16 +29,14 @@ pub fn new_server(config ServerConfig) &Server {
 
 pub fn (mut s Server) start(shared logger Log) {
 	println('Server thread starting')
-	for !s.shutdown{
+	for !s.config.shutdown{
 
 	}
 }
 
 pub fn (mut s Server) stop() {
-	s.shutdown = true
-	println('Server thread stopping')
-	println('Shutdown server? $s.shutdown')
-}
+	//s.config.shutdown = true
+	println('Server thread stopping')}
 
 /* pub fn (mut s Server) add_player(player Player) {
 	s.players[player.hash_code().str()] = player

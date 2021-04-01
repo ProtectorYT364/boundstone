@@ -29,11 +29,12 @@ fn main() {
 	saddr, port := net.split_address(address) or { 
 		panic(err)
 	}
-	shared config := bstone.ServerConfig{
-		addr: net.Addr{
+	addr := net.Addr{
 			saddr: saddr
 			port: port
 		}
+	shared config := bstone.ServerConfig{
+		addr: addr
 	}
 
 	// TODO spawn multiple threads https://github.com/vlang/v/blob/master/doc/docs.md#concurrency
@@ -41,13 +42,13 @@ fn main() {
 
 	// TODO dynamic version string
 	logger.log(term.bg_black(term.red(term.bold('■ boundstone MCPE v0.0.1 ■'))), .info)
-	logger.log('SECOND LOG', .info)
+	logger.log(term.bg_black(term.green('Use "stop" for shutdown')), .info)
 
 	// TODO Data share between threads
-	logger.log(config.addr.str(),.debug)
+	//logger.log(config.addr.str(),.debug)
 
-	mut raklib := vraklib.new_vraklib(config)
-	mut server := bstone.new_server(config) // or { panic(err) }
+	mut raklib := vraklib.new_vraklib(shared config)
+	mut server := bstone.new_server(shared config) // or { panic(err) }
 
 	threads << go raklib.start(shared logger)//maybe pass config here
 	threads << go server.start(shared logger)//maybe pass config here
@@ -64,7 +65,6 @@ fn main() {
 	}
 
 	
-	logger.log(term.bg_black(term.green('Use "stop" for shutdown')), .info)
 
 	raklib.stop()
 	server.stop()
