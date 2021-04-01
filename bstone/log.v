@@ -38,7 +38,7 @@ pub fn(shared logger Log) log(m string, l log.Level){
 		t := time.now()
 		println('[$f $t.format_ss()] $m')//print to cli
 		
-		match l {//log to file
+		match l {//log to file TODO figure out how to get rid of the colors
 				.fatal { logger.log.fatal(m) }
 			 .error {logger.log.error(m) }
 			.warn { logger.log.warn(m) }
