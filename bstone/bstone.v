@@ -7,26 +7,18 @@ import time
 
 pub struct Server {
 pub mut:
-	config  ServerConfig
-	shutdown bool = false
+	config  &ServerConfig
 	//players map[string]Player
 }
 
 pub struct ServerConfig {
-pub mut:
+pub:
 	addr net.Addr
+pub mut:
 	max_players int = 100
 	name        string = 'boundstone MCPE'
-/* pub:
-	l chan LogMsg */
-}/* 
-
-pub struct LogMsg{
-//pub:
-pub mut:
-	m string
-	l log.Level = .debug
-} */
+	shutdown bool = false
+}
 
 pub fn new_server(config ServerConfig) &Server {
 	//sm := &Server{config, map[string]Player{}}

@@ -1,4 +1,4 @@
-module main
+//module main
 
 // import sync
 import bstone
@@ -14,28 +14,26 @@ fn main() {
 	// available colors are: black,blue,yellow,green,cyan,gray,bright_blue,bright_green,bright_red,bright_black,bright_cyan
 	term.clear()
 
-	shared logger := bstone.Log{
-		l: chan bstone.LogMsg{}
-	}
-	lock logger{
-	logger.log.set_level(.info)//TODO from config
-	logger.log.set_output_level(.debug)//TODO from config
+	mut l := log.Log{}
+	l.set_level(.info)//TODO from config
+	l.set_output_level(.debug)//TODO from config
 	// Make a new file called server.log in the current folder
-	logger.log.set_full_logpath('./server.log')
-	println('Logging to $logger.log.output_file_name')
+	l.set_full_logpath('./server.log')
+	println('Logging to $l.output_file_name')
+
+	shared logger := &bstone.Log{
+		log: &l
 	}
 
-	mut config := bstone.ServerConfig{}
-	//config.l = chan bstone.LogMsg{}
 	address := '0.0.0.0:19132'
 	saddr, port := net.split_address(address) or { 
 		panic(err)
-		//logger.log(err, .fatal)
-		return
 	}
-	config.addr = net.Addr{
-		saddr: saddr
-		port: port
+	shared config := bstone.ServerConfig{
+		addr: net.Addr{
+			saddr: saddr
+			port: port
+		}
 	}
 
 	// TODO spawn multiple threads https://github.com/vlang/v/blob/master/doc/docs.md#concurrency
@@ -47,45 +45,38 @@ fn main() {
 
 	// TODO Data share between threads
 	logger.log(config.addr.str(),.debug)
-	mut raklib := vraklib.new_vraklib(config.addr)
-	threads << go raklib.start(shared logger)//maybe pass config here
+
+	mut raklib := vraklib.new_vraklib(config)
 	mut server := bstone.new_server(config) // or { panic(err) }
+
+	threads << go raklib.start(shared logger)//maybe pass config here
 	threads << go server.start(shared logger)//maybe pass config here
 	
-	threads << go read_input(shared logger)
+	//threads << go read_input(shared logger)
+
+	for {
+		command := read_input()
+		logger.log('Got command: "$command"',.debug)
+		if command == 'stop'{
+			lock config{config.shutdown = true}
+			break
+		}
+	}
+
 	
 	logger.log(term.bg_black(term.green('Use "stop" for shutdown')), .info)
 
-	shutdownr := go shutdown(shared logger)
-	if shutdownr.wait(){
-		raklib.stop()
-		server.stop()
-	}
+	raklib.stop()
+	server.stop()
 
 	threads.wait()
 
 	logger.log(term.warn_message('Shutting down..'),.warn)
-	lock logger{logger.l.close()}
+	//lock logger{logger.l.close()}
 
 	println(term.warn_message('Server stopped'))
 }
 
-pub fn shutdown(shared logger bstone.Log) bool {
-	for !logger.stop{
-		lock logger{logger.log.flush()}
-	}
-	println('Shutdown!')
-	return true
-}
-
-fn read_input(shared logger bstone.Log){
-	for {
-		mut read_line := os.input('> ')
-		logger.log('Got command $read_line',.debug)
-		if read_line == 'stop' {
-			break
-		}
-	}
-	lock logger{logger.stop()}
-	rlock logger{println(logger.stop)}
+fn read_input() string{
+	return os.input('')
 }
