@@ -53,9 +53,14 @@ fn main() {
 	threads << go server.start(shared logger)//maybe pass config here
 	
 	threads << go read_input(shared logger)
-	threads << go logger.run_logger()
 	
 	logger.log(term.bg_black(term.green('Use "stop" for shutdown')), .info)
+
+	shutdownr := go shutdown(shared logger)
+	if shutdownr.wait(){
+		raklib.stop()
+		server.stop()
+	}
 
 	threads.wait()
 
@@ -65,13 +70,20 @@ fn main() {
 	println(term.warn_message('Server stopped'))
 }
 
+pub fn shutdown(shared logger bstone.Log) bool {
+	for !logger.stop{}
+	println('Shutdown!')
+	return true
+}
+
 fn read_input(shared logger bstone.Log){
 	for {
 		mut read_line := os.input('> ')
+		logger.log('Got command $read_line',.debug)
 		if read_line == 'stop' {
 			break
 		}
-		logger.log('Got command $read_line',.debug)
 	}
 	lock logger{logger.stop()}
+	rlock logger{println(logger.stop)}
 }

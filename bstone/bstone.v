@@ -35,21 +35,16 @@ pub fn new_server(config ServerConfig) &Server {
 }
 
 pub fn (mut s Server) start(shared logger Log) {
-	s.shutdown = &logger.stop
-	println('Shutdown? $s.shutdown')
 	println('Server thread starting')
 	for !s.shutdown{
 
 	}
-	s.stop()
-	//logger.close()
-	s.shutdown = &logger.stop
-	println('Shutdown? $s.shutdown')
 }
 
 pub fn (mut s Server) stop() {
+	s.shutdown = true
 	println('Server thread stopping')
-	println('Shutdown? $s.shutdown')
+	println('Shutdown server? $s.shutdown')
 }
 
 /* pub fn (mut s Server) add_player(player Player) {
