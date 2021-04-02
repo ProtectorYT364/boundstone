@@ -1,8 +1,6 @@
 module bstone
 
 import log
-import time
-import term
 
 pub struct Log {
 pub mut:
@@ -15,21 +13,7 @@ pub mut:
 	l log.Level = .debug
 }
 
-// tag returns the tag for log level `l` as a string. From log because not public TODO find a way to remove
-fn tag_to_cli(l log.Level) string {
-	return match l {
-		.fatal { term.red('FATAL') }
-		.error { term.red('ERROR') }
-		.warn { term.yellow('WARN ') }
-		.info { term.white('INFO ') }
-		.debug { term.blue('DEBUG') }
-	}
-}
-
 pub fn (shared logger Log) log(m string, l log.Level) {
-	f := tag_to_cli(l)
-	t := time.now()
-	println('[$f $t.format_ss()] $m') // print to cli
 	lock logger {
 		match l {
 			// log to file TODO figure out how to get rid of the colors
@@ -40,10 +24,4 @@ pub fn (shared logger Log) log(m string, l log.Level) {
 			.debug { logger.log.debug(m) }
 		}
 	}
-}
-
-pub fn (mut logger Log) stop() {
-	println('Stopping logger...')
-
-	// logger.stop = true
 }

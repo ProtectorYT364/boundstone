@@ -19,6 +19,7 @@ fn main() {
 	l.set_level(settings.log_level)
 	l.set_output_level(settings.log_output_level)
 	l.set_full_logpath('./server.log')
+	l.log_to_console_too()
 	shared logger := &bstone.Log{
 		log: &l
 	}
