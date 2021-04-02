@@ -4,12 +4,12 @@ import log
 import time
 import term
 
-pub struct Log{
+pub struct Log {
 pub mut:
 	log log.Log
 }
 
-pub struct LogMsg{
+pub struct LogMsg {
 pub mut:
 	m string
 	l log.Level = .debug
@@ -26,15 +26,15 @@ fn tag_to_cli(l log.Level) string {
 	}
 }
 
-pub fn(shared logger Log) log(m string, l log.Level){
-		f := tag_to_cli(l)
-		t := time.now()
-		println('[$f $t.format_ss()] $m')//print to cli
-		
-	lock logger{
-		match l {//log to file TODO figure out how to get rid of the colors
-				.fatal { logger.log.fatal(m) }
-			 .error {logger.log.error(m) }
+pub fn (shared logger Log) log(m string, l log.Level) {
+	f := tag_to_cli(l)
+	t := time.now()
+	println('[$f $t.format_ss()] $m') // print to cli
+	lock logger {
+		match l {
+			// log to file TODO figure out how to get rid of the colors
+			.fatal { logger.log.fatal(m) }
+			.error { logger.log.error(m) }
 			.warn { logger.log.warn(m) }
 			.info { logger.log.info(m) }
 			.debug { logger.log.debug(m) }
@@ -42,7 +42,8 @@ pub fn(shared logger Log) log(m string, l log.Level){
 	}
 }
 
-pub fn(mut logger Log) stop(){
+pub fn (mut logger Log) stop() {
 	println('Stopping logger...')
-	//logger.stop = true
+
+	// logger.stop = true
 }
