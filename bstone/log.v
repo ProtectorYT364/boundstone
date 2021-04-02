@@ -7,12 +7,6 @@ pub mut:
 	log log.Log
 }
 
-pub struct LogMsg {
-pub mut:
-	m string
-	l log.Level = .debug
-}
-
 pub fn (shared logger Log) log(m string, l log.Level) {
 	lock logger {
 		match l {
