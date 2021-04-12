@@ -9,6 +9,7 @@ struct Player {
 }
 
 // pub fn(mut s Server) new_player(ip string, port u16) Player {
+
 pub fn new_player(ip string, port u16) Player {
 	return Player{
 		//		vraklib: vraklib

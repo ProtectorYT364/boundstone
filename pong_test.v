@@ -1,6 +1,5 @@
 import vraklib
 import net
-import time
 
 fn main() {
 	l := net.listen_udp(19132) or { panic(err) } // binds to local address
